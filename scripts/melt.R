@@ -18,15 +18,28 @@ calculate_melt <- function( temperature, melt_factor ) {
 }
 
 
-calculate_precip <- function( t ) {
-  #' @description generate synthetic precipitation data (m/day)
-  #' @param t time in days since beginning of simulation (currently deactivated)
-  #' @example calculate_precip(t = 5)
+calculate_accumulation <- function(temperature, precipitation, threshold_temperature) {
+  #' @description Calculate accumulation at a point
+  #'
+  #' @param temperature Numeric. The temperature at the point of interest (in Celsius).
+  #' @param precipitation Numeric. The precipitation amount (in mm or other units).
+  #' @param threshold_temperature Numeric. The threshold temperature below which it snows (in Celsius).
+  #'
+  #' @return Numeric. The accumulation at the given point.
+  #' @examples calculate_accumulation(temperature = -2, precipitation = 10, threshold_temperature = 0)
   
-  out <- 8e-3 # m/day
   
-  return( out )
+  if (temperature <= threshold_temperature) {
+    
+    return(precipitation)
+    
+  } else {
+    
+    return(0)
+    
+  }
 }
+
 
 calculate_lapsed_temperature <- function(elevation, elevation_station, temperature_station, lapse_rate) {
   #' @description Calculate lapsed temperature
@@ -45,4 +58,15 @@ calculate_lapsed_temperature <- function(elevation, elevation_station, temperatu
   temperature = lapse_rate * delta_z + temperature_station
   
   return(temperature)
+}
+
+
+calculate_precip <- function( t ) {
+  #' @description generate synthetic precipitation data (m/day)
+  #' @param t time in days since beginning of simulation (currently deactivated)
+  #' @example calculate_precip(t = 5)
+  
+  out <- 8e-3 # m/day
+  
+  return( out )
 }
