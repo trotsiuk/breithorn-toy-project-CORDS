@@ -17,3 +17,13 @@ calculate_melt <- function( temperature, melt_factor ) {
   return( out )
 }
 
+
+calculate_precip <- function( t ) {
+  #' @description generate synthetic precipitation data (m/day)
+  #' @param t time in days since beginning of simulation (currently deactivated)
+  #' @example calculate_precip(t = 5)
+  
+  out <- 8e-3 # m/day
+  
+  return( out )
+}
