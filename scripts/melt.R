@@ -14,6 +14,6 @@ calculate_melt <- function( temperature, melt_factor ) {
     
   }
   
-  returnt( out )
+  return( out )
 }
 
