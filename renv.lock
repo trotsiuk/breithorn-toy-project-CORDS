@@ -64,8 +64,14 @@
     "breithornToyProjectCORDS": {
       "Package": "breithornToyProjectCORDS",
       "Version": "0.1.0",
-      "Source": "unknown",
-      "Hash": "57004d91f2dc33a72165d1d2244b65c8"
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "breithornToyProjectCORDS",
+      "RemoteUsername": "fabern",
+      "RemoteRef": "3bbddd30c98e4fc5dd48ef1cb8699b0e2cab3896",
+      "RemoteSha": "3bbddd30c98e4fc5dd48ef1cb8699b0e2cab3896",
+      "Hash": "8521bb7b9944c3b82ff84a72cbf8e28f"
     },
     "cli": {
       "Package": "cli",
