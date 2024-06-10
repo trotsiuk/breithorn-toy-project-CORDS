@@ -27,3 +27,22 @@ calculate_precip <- function( t ) {
   
   return( out )
 }
+
+calculate_lapsed_temperature <- function(elevation, elevation_station, temperature_station, lapse_rate) {
+  #' @description Calculate lapsed temperature
+  #'
+  #' @param elevation Numeric. The elevation at the point of interest (in meters).
+  #' @param elevation_station Numeric. The elevation of the weather station (in meters).
+  #' @param temperature_station Numeric. The temperature at the weather station (in Celsius).
+  #' @param lapse_rate Numeric. The lapse rate (in Celsius per meter).
+  #'
+  #' @return Numeric. The lapsed temperature at the given elevation.
+  #' @examples
+  #' calculate_lapsed_temperature(elevation = 1500, elevation_station = 1000, temperature_station = 10, lapse_rate = -0.0065)
+  
+  delta_z = elevation - elevation_station
+  
+  temperature = lapse_rate * delta_z + temperature_station
+  
+  return(temperature)
+}
