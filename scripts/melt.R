@@ -4,6 +4,10 @@ calculate_melt <- function( temperature, melt_factor ) {
   #' @param melt_factro a melting factor (m/day/degree).
   #' @example calculate_melt(temperature = 5, melt_factor = 0.1)
   
+  if (melt_factor < 0) {
+    stop("melt_factor cannot be negative. Please check your input parameters.")
+  }
+  
   if (temperature >= 0) {
     
     out <- melt_factor * temperature

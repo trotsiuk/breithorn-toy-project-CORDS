@@ -9,5 +9,7 @@ testthat::test_that("calculate_melt()", {
   testthat::expect_true(calculate_melt(10, melt_factor = 0.5) > 0)
   testthat::expect_equal(calculate_melt(10, melt_factor = 0.5), 5)
   testthat::expect_equal(calculate_melt(10, melt_factor = 0.2), 2)
+  testthat::expect_error(calculate_melt(10, melt_factor = -10))
+  #testthat::expect_error(calculate_melt(10, melt_factor = 10))
 })
 
