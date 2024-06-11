@@ -121,7 +121,7 @@ if (!file.exists(weather_fl)) {
 
 dem_fl <- 'data/foreign/dhm200.asc'
 if (!file.exists(dem_fl)) {
-  dem_url <- "https://data.geo.admin.ch/ch.swisstopo.digitales-hoehenmodell_25/data.zip"
+  dem_url <- "https://github.com/mauro3/CORDS/raw/master/data/workshop-reproducible-research/foreign/swisstopo_dhm200_cropped.zip"
   zip_path <- 'data/foreign/dhm200.zip'
   
   message("Downloading DEM data...")
@@ -129,15 +129,14 @@ if (!file.exists(dem_fl)) {
   
   # Extract specific file from zip
   message("Extracting DEM data...")
-  unzip_one_file(zip_path, "DHM200.asc", dem_fl)
+  unzip_one_file(zip_path, "swisstopo_dhm200_cropped/dhm200_cropped.asc", dem_fl)
   file.remove(zip_path)
 }
 
 
-
 mask_fl <- 'data/own/glacier_mask.asc'
 if (!file.exists(mask_fl)) {
-  mask_url <- "https://github.com/mauro3/CORDS/blob/d42481699d2ecf684232acabd799482e574be739/data/workshop-reproducible-research/own/mask_breithorngletscher.zip"
+  mask_url <- "https://github.com/mauro3/CORDS/raw/master/data/workshop-reproducible-research/own/mask_breithorngletscher.zip"
   zip_path <- 'data/own/mask_breithorngletscher.zip'
   
   message("Downloading Masc data...")
@@ -145,7 +144,7 @@ if (!file.exists(mask_fl)) {
   
   # Extract specific file from zip
   message("Extracting Masc data...")
-  unzip_one_file(zip_path, "DHM200.asc", mask_fl)
+  unzip_one_file(zip_path, "mask_breithorngletscher/mask_breithorngletscher.asc", mask_fl)
   file.remove(zip_path)
   
   
