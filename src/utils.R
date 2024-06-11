@@ -104,14 +104,6 @@ visualize_data <- function(t, Ts,  dem, mask, results_dir) { #
 }
 
 
-
-glacier_net_balance_fn <- function(zs, dt, Ts, Ps, melt_factor, T_threshold, lapse_rate) {
-  # Placeholder for actual implementation
-  net_balance <- runif(length(zs), -10, 10)  # Placeholder for net balance calculation
-  glacier_net_balance <- sum(net_balance) * dt  # Placeholder for glacier net balance calculation
-  return(list(glacier_net_balance = glacier_net_balance, net_balance = net_balance))
-}
-
 # Function to run model for the whole glacier
 run_model_for_glacier <- function(dem, mask, Ts, Ps, melt_factor, T_threshold, lapse_rate, z_weather_station, results_dir) {
   zs <- raster::as.data.frame(dem)[raster::as.data.frame(mask) ==1] - z_weather_station
