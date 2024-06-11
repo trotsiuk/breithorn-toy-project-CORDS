@@ -12,7 +12,7 @@ The main function is `glacier_net_balance_fn` which returns:
 - net balance at all points [m] (i.e. how much volume was gained or
   lost at each grid cell)
 
-In space for Breithorn glacier this looks like: ![](README-assets/breithorn_net_balance_field___final-FINAL.png) 
+In space for Breithorn glacier this looks like: ![](README-assets/breithorn_net_balance_field___final___FINAL.png) 
 
 ## Data
 
