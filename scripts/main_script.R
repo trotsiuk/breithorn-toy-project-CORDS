@@ -12,7 +12,7 @@ synthetic_T <- function(t){
 }
 
 synthetic_Pfunction <- function(t){
-  return(rep(8e-6, length(t))) # precip in m/day
+  return(rep(8e-3, length(t))) # precip in m/day
 }
 
 synthetic_glacier <- function(){
