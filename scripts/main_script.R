@@ -169,46 +169,17 @@ data <- read_data(weather_fl, dem_fl, mask_fl, Ps0)
 t <- data$t
 Ts <- data$Ts
 dem <- data$dem
-# mask <- data$mask
+mask <- data$mask
 Ps <- data$Ps
 z_weather_station <- data$z_weather_station
 
 # Visualize data
-visualize_data(t, Ts, dem, results_dir) # mask, 
+visualize_data(t, Ts, dem, mask, results_dir) # 
 
 # Run model for the whole glacier
-model_results <- run_model_for_glacier(dem, Ts, Ps, PARAMS$melt_factor, PARAMS$T_threshold, PARAMS$lapse_rate, z_weather_station, results_dir)
+model_results <- run_model_for_glacier(dem, mask, Ts, Ps, PARAMS$melt_factor, PARAMS$T_threshold, PARAMS$lapse_rate, z_weather_station, results_dir)
 zs <- model_results$zs
 dt <- model_results$dt
 
 # Generate output table
 generate_output_table(zs, dt, Ts, Ps, PARAMS$melt_factor, PARAMS$T_threshold, PARAMS$lapse_rate, results_dir)
-
-
-
-
-
-
-# Run melt model for a point at 2600m (Placeholder for future implementation)
-
-# Run melt model for the whole glacier (Placeholder for future implementation)
-
-# Example usage of ggplot2 for visualization
-plot_example <- function() {
-  # Placeholder for actual data
-  df <- data.frame(x = 0:3, y = c(0, 1, 4, 9))
-  
-  p <- ggplot(df, aes(x = x, y = y)) +
-    geom_line() +
-    ggtitle("Example Plot") +
-    xlab("X-axis") +
-    ylab("Y-axis")
-  
-  ggsave(filename = file.path(results_dir, "example_plot.png"), plot = p)
-  print(p)
-}
-
-if (interactive()) {
-  plot_example()
-}
-

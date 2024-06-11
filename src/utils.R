@@ -82,24 +82,24 @@ read_data <- function(weather_fl, dem_fl, mask_fl, Ps0) {
   z_weather_station <- 1500  # Placeholder for actual elevation data
   dem <- raster::raster(dem_fl)
   mask <- raster::raster(mask_fl)
-  return(list(t = t, Ts = Ts, dem = dem, Ps = Ps, z_weather_station = z_weather_station)) #mask = mask, 
+  return(list(t = t, Ts = Ts, mask = mask, dem = dem, Ps = Ps, z_weather_station = z_weather_station)) #
 }
 
 
-visualize_data <- function(t, Ts,  dem, results_dir) { #mask,
+visualize_data <- function(t, Ts,  dem, mask, results_dir) { #
   plot_filename <- make_sha_filename(file.path(results_dir, "breithorn_T"), "png")
   png(plot_filename)
   plot(t, Ts, type = "l", xlab = "time (d)", ylab = "T (C)")
   dev.off()
   
-  # mask_plot_filename <- make_sha_filename(file.path(results_dir, "breithorn_mask"), "png")
-  # png(mask_plot_filename)
-  # plot(mask)
-  # dev.off()
+  mask_plot_filename <- make_sha_filename(file.path(results_dir, "breithorn_mask"), "png")
+  png(mask_plot_filename)
+  raster::plot(mask)
+  dev.off()
   
   dem_plot_filename <- make_sha_filename(file.path(results_dir, "breithorn_dem"), "png")
   png(dem_plot_filename)
-  plot(dem)
+  raster::plot(dem)
   dev.off()
 }
 
@@ -113,22 +113,38 @@ glacier_net_balance_fn <- function(zs, dt, Ts, Ps, melt_factor, T_threshold, lap
 }
 
 # Function to run model for the whole glacier
-run_model_for_glacier <- function(dem, Ts, Ps, melt_factor, T_threshold, lapse_rate, z_weather_station, results_dir) {
-  zs <- dem - z_weather_station
+run_model_for_glacier <- function(dem, mask, Ts, Ps, melt_factor, T_threshold, lapse_rate, z_weather_station, results_dir) {
+  zs <- raster::as.data.frame(dem)[raster::as.data.frame(mask) ==1] - z_weather_station
+  # zs <- raster::as.array(dem) - z_weather_station
   dt <- diff(t)[1]
+  xy <- raster::as.data.frame(dem, xy = TRUE)[raster::as.data.frame(mask) == 1,1:2]
   
   result <- glacier_net_balance_fn(zs, dt, Ts, Ps, melt_factor, T_threshold, lapse_rate)
   glacier_net_balance <- result$glacier_net_balance
   net_balance <- result$net_balance
   
   net_balance_df <- data.frame(z = zs, net_balance = net_balance)
-  net_balance_map <- rasterFromXYZ(net_balance_df)
+  net_balance_map <- raster::rasterFromXYZ(cbind(xy, net_balance_df$net_balance))
   
   net_balance_plot_filename <- make_sha_filename(file.path(results_dir, "breithorn_net_balance_field"), "png")
   png(net_balance_plot_filename)
-  plot(net_balance_map)
+  raster::plot(net_balance_map)
   dev.off()
   
   return(list(zs = zs, dt = dt))
+}
+
+
+generate_output_table <- function(zs, dt, Ts, Ps, melt_factor, T_threshold, lapse_rate, results_dir) {
+  output_data <- data.frame()
+  for (dT in -4:4) {
+    Ts_offset <- Ts + dT
+    result <- glacier_net_balance_fn(zs, dt, Ts_offset, Ps, melt_factor, T_threshold, lapse_rate)
+    massbalance <- result$glacier_net_balance
+    output_data <- rbind(output_data, data.frame(Temperature_Offset = dT, Mass_Balance = massbalance))
+  }
+  
+  output_csv_path <- make_sha_filename(file.path(results_dir, "deltaT_impact"), "csv")
+  write.csv(output_data, output_csv_path, row.names = FALSE)
 }
 
