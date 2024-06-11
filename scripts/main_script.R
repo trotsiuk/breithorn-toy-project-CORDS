@@ -91,3 +91,124 @@ ggplot(example_data, aes(x, y)) +
   geom_point()
 
 ggsave(plot_filename)
+
+
+
+# T13 Real example --------------------------------------------------------
+
+# Set up results directory
+results_dir <- "results/"
+data_own_dir <- 'data/own/'
+data_foreign_dir <- 'data/foreign/'
+
+for( d in c(results_dir, data_own_dir, data_foreign_dir)){
+  if(!dir.exists(d)) dir.create( d, recursive = T )
+}
+
+# Download data
+weather_fl <- "data/own/weather.dat"
+
+if (!file.exists(weather_fl)) {
+  weather_url <- "https://raw.githubusercontent.com/mauro3/CORDS/master/data/weather.dat"
+  info_url <- "https://raw.githubusercontent.com/mauro3/CORDS/master/data/weather.info"
+  weather_info_fl <- 'data/own/weather.info'
+  
+  message("Downloading weather data...")
+  download_file(weather_url, weather_fl)
+  download_file(info_url, weather_info_fl)
+}
+
+
+dem_fl <- 'data/foreign/dhm200.asc'
+if (!file.exists(dem_fl)) {
+  dem_url <- "https://data.geo.admin.ch/ch.swisstopo.digitales-hoehenmodell_25/data.zip"
+  zip_path <- 'data/foreign/dhm200.zip'
+  
+  message("Downloading DEM data...")
+  download_file(dem_url, zip_path)
+  
+  # Extract specific file from zip
+  message("Extracting DEM data...")
+  unzip_one_file(zip_path, "DHM200.asc", dem_fl)
+  file.remove(zip_path)
+}
+
+
+
+mask_fl <- 'data/own/glacier_mask.asc'
+if (!file.exists(mask_fl)) {
+  mask_url <- "https://github.com/mauro3/CORDS/blob/d42481699d2ecf684232acabd799482e574be739/data/workshop-reproducible-research/own/mask_breithorngletscher.zip"
+  zip_path <- 'data/own/mask_breithorngletscher.zip'
+  
+  message("Downloading Masc data...")
+  download_file(mask_url, zip_path)
+  
+  # Extract specific file from zip
+  message("Extracting Masc data...")
+  unzip_one_file(zip_path, "DHM200.asc", mask_fl)
+  file.remove(zip_path)
+  
+  
+}
+
+
+PARAMS <- list(
+  lapse_rate = -0.6 / 100,
+  melt_factor = 0.005,
+  T_threshold = 4
+)
+
+# Read data and visualize it (Placeholder for future implementation)
+weather_fl <- "own/weather.dat"
+mask_fl <- "data/own/glacier_mask.asc"
+dem_fl <- 'data/foreign/dhm200.asc'
+Ps0 <- 0.005  # Mean (and constant) precipitation rate [m/d]
+
+# Read data
+data <- read_data(weather_fl, dem_fl, mask_fl, Ps0)
+t <- data$t
+Ts <- data$Ts
+dem <- data$dem
+# mask <- data$mask
+Ps <- data$Ps
+z_weather_station <- data$z_weather_station
+
+# Visualize data
+visualize_data(t, Ts, dem, results_dir) # mask, 
+
+# Run model for the whole glacier
+model_results <- run_model_for_glacier(dem, Ts, Ps, PARAMS$melt_factor, PARAMS$T_threshold, PARAMS$lapse_rate, z_weather_station, results_dir)
+zs <- model_results$zs
+dt <- model_results$dt
+
+# Generate output table
+generate_output_table(zs, dt, Ts, Ps, PARAMS$melt_factor, PARAMS$T_threshold, PARAMS$lapse_rate, results_dir)
+
+
+
+
+
+
+# Run melt model for a point at 2600m (Placeholder for future implementation)
+
+# Run melt model for the whole glacier (Placeholder for future implementation)
+
+# Example usage of ggplot2 for visualization
+plot_example <- function() {
+  # Placeholder for actual data
+  df <- data.frame(x = 0:3, y = c(0, 1, 4, 9))
+  
+  p <- ggplot(df, aes(x = x, y = y)) +
+    geom_line() +
+    ggtitle("Example Plot") +
+    xlab("X-axis") +
+    ylab("Y-axis")
+  
+  ggsave(filename = file.path(results_dir, "example_plot.png"), plot = p)
+  print(p)
+}
+
+if (interactive()) {
+  plot_example()
+}
+
