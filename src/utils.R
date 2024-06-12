@@ -1,3 +1,22 @@
+
+# Synthitic data ----------------------------------------------------------
+## Define the synthetic weather and glacier
+synthetic_T <- function(t){
+  return(-10*cos(2*pi/365 * t) - 8*cos(2*pi* t) + 5 )
+}
+
+synthetic_Pfunction <- function(t){
+  return(rep(8e-3, length(t))) # precip in m/day
+}
+
+synthetic_glacier <- function(){
+  x <- seq(0,5000,500) #0:500:5000
+  elevation = x/5  + 1400
+  return(list(x, elevation))
+}
+
+
+# SHA hash functions ------------------------------------------------------
 # src/utils.R
 library(git2r)
 
@@ -23,6 +42,10 @@ make_sha_filename <- function(basename, ext) {
   return(paste0(basename, "-", format(Sys.Date(), format = "%Y%m%d"), "-", postfix, ".", ext))
 }
 
+
+
+
+# Support functions for the real example ----------------------------------
 
 
 # Example usage:
